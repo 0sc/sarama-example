@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/sarama"
+	"github.com/Shopify/sarama"
 )
 
 func subscribe(topic string, consumer sarama.Consumer) {
