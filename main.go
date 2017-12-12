@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/sarama"
+	"github.com/Shopify/sarama"
 )
 
 const topic = "sample-topic"
@@ -31,7 +31,11 @@ func main() {
 		r.ParseForm()
 		msg := prepareMessage(topic, r.FormValue("q"))
 		partition, offset, err := producer.SendMessage(msg)
-		fmt.Fprintf(w, "Message was saved to partion: %d.\nMessage offset is: %d.\n %s error occured.", partition, offset, err.Error())
+		if err != nil {
+			fmt.Fprintf(w, "%s error occured.", err.Error())
+		} else {
+			fmt.Fprintf(w, "Message was saved to partion: %d.\nMessage offset is: %d.\n", partition, offset)
+		}
 	})
 
 	http.HandleFunc("/retrieve", func(w http.ResponseWriter, r *http.Request) { fmt.Fprint(w, html.EscapeString(getMessage())) })
